@@ -37,6 +37,7 @@
 
 include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyquestion.php' );
 include_once( 'kernel/classes/datatypes/ezxmltext/ezxmltext.php' );
+include_once( 'kernel/classes/datatypes/ezxmltext/handlers/input/ezsimplifiedxmlinput.php');
 
 class eZSurveyFormattedParagraph extends eZSurveyQuestion
 {
@@ -94,8 +95,13 @@ class eZSurveyFormattedParagraph extends eZSurveyQuestion
             $xmlData .= "</section>";
 
             $xmlObject = new eZXMLText( $inputXML, null );
+
+	    $xmlObject->XMLInputHandler =& new eZSimplifiedXMLInput($inputXML,null);
+
             $inputHandler =& $xmlObject->attribute( 'input' );
+
             $data =& $inputHandler->convertInput( $xmlData );
+
             $domString =& eZXMLTextType::domString( $data[0] );
 
             $domString = preg_replace( "#<paragraph> </paragraph>#", "<paragraph>&nbsp;</paragraph>", $domString );

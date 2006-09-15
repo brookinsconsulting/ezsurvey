@@ -74,12 +74,40 @@ $tpl->setVariable( 'view_parameters', array( 'offset' => $offset ) );
 $tpl->setVariable( 'limit', $limit );
 $tpl->setVariable( 'count', $countList );
 
+$ini =& eZINI::instance('ezsurvey.ini');
+
+$path_text = $ini->variable( 'PathTextSettings', 'PathText' );
+
+$path_node_id = $ini->variable('PathNodeIDSettings','PathNodeID');
+
+$node = eZContentObjectTreeNode::fetch($survey->attribute('node_id'));
+
+$tpl->setVariable('node',$node);
+
+$tpl->setVariable('content_template','design:survey/rview.tpl');
+
+$tpl->setVariable('language_code',$node->CurrentLanguage);
+
 $Result = array();
-$Result['content'] =& $tpl->fetch( 'design:survey/rview.tpl' );
-$Result['path'] = array( array( 'url' => '/survey/list',
-                                'text' => ezi18n( 'survey', 'Survey' ) ),
-                         array( 'url' => 'survey/result_list/' . $survey->attribute( 'id' ),
-                                'text' => ezi18n( 'survey', 'Result' ) ),
-                         array( 'url' => false,
-                                'text' => ezi18n( 'survey', 'View' ) ) );
+
+$Result['content'] =& $tpl->fetch( 'design:survey/full.tpl' );
+
+$Result['path']=array();
+
+for($i=0;$i<count($path_text);$i++){
+
+         $Result['path'][$i]['text']=$path_text[$i];
+
+}
+
+$Result['path'][count($path_text)]['text']=$node->attribute('name');
+
+for($i=0;$i<count($path_node_id);$i++){
+
+         $Result['path'][$i]['node_id']=$path_node_id[$i];
+
+}
+
+$Result['path'][count($path_node_id)]['node_id']=$node->attribute('node_id');
+
 ?>

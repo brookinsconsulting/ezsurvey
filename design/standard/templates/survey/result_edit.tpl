@@ -1,7 +1,7 @@
 <div class="survey">
 <form enctype="multipart/form-data" method="post" action={concat("survey/result_edit/",$survey_result.id)|ezurl}>
 
-<input type="hidden" name="SurveyID" value="$survey.id" />
+<input type="hidden" name="SurveyID" value="{$survey.id}" />
 
 <h1>{$survey.title|wash}</h1>
 

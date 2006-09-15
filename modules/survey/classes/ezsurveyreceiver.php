@@ -254,17 +254,19 @@ class eZSurveyReceiver extends eZSurveyQuestion
             if ( !eZMail::validate( $option['value'] ) )
             {
                 $validation['error'] = true;
-                $validation['errors'][] = ezi18n( 'survey', "Entered text '%text' in the question with id %number is not an email address!", null,
+                $validation['errors'][] = ezi18n( 'survey', "Entered text '%text' in the question with id ( %name ) is not an email address!", null,
                                                   array( '%number' => $this->ID,
-                                                         '%text' => $option['value'] ) );
+                                                         '%text' => $option['value'],
+						         '%name' => $this->attribute('text') ) );
                 break;
             }
             
             if ( in_array( $option['value'], $optionValues ) )
             {
                 $validation['error'] = true;
-                $validation['errors'][] = ezi18n( 'survey', 'Email addresses in the question with id %question must have unique values!', null,
-                                                  array( '%number' => $this->ID ) );
+                $validation['errors'][] = ezi18n( 'survey', 'Email addresses in the question with id ( %name ) must have unique values!', null,
+                                                  array( '%number' => $this->ID,
+					                 '%name'=> $this->attribute('text') ) );
                 break;
             }
             $optionValues[] = $option['value'];

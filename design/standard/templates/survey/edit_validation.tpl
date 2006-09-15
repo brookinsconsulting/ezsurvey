@@ -1,6 +1,6 @@
 {section show=and( is_set( $survey_validation ), or( $survey_validation.error, $survey_validation.warning ))}
 <div class="warning">
-<h2>{"Warning"|i18n( 'survey' )}</h2>
+<h5>{"Warning"|i18n( 'survey' )}</h5>
 <ul>
 {section var=error loop=$survey_validation.errors}
   <li>
@@ -14,5 +14,4 @@
 {/section}
 </ul>
 </div>
-<br/ >
 {/section}

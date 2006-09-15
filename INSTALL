@@ -105,6 +105,77 @@ Initializing database
 
 [Append any additional settings for your extension here]
 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+
+I changed the ezsurvey extension so that it can be integrated with ez publish. You can manage ezsurvey
+object in a standard ez publish way. I still use a "survey" content object as a wrapper object between
+ez publish and the ezsurvey object, but this time you don't need to create the "survey" object manually.
+After you create an "ezsurvey", the wrapper object will be created automatically. If you remove an "ezsurvey" 
+object, the wrapper object will be removed as well. 
+
+I also fixed a few bugs. The most critical bug is: formatted paragraph causes a fetal error when "ezdhtml" extension is 
+installed. 
+
+
+*NOTE: 
+I assume that you have installed ezpublish. 
+So the first thing you need to do is executing the sql/mysql/schema.sql to create the ezsurvey tables.
+
+Then, please follow the instruction below to integrate ez survey into ez publish:
+
+1. Import ezsurvey.ezpkg or create a survey content class as the following:
+
+   + class name: Survey
+   + identifier: survey
+   + object name pattern: <survey_name>
+
+   Attributes:
+
+   Survey name [Text line]
+   Name: Survey name
+   Identifier: survey_name
+
+   Survey number [Integer]
+   Name: Survey number
+   Identifier: survey_number
+   Default value: 1
+
+2. Create a folder called "surveys" under the root node (ezpublish)
+
+3. Remember the node_id of "surveys" folder
+
+4. Change settings/ezsurvey.ini.append.php
+   replace "SURVEYS_FOLDER_NODE_ID" to the node_id of "surveys" folder
+
+   The [PathTextSettings] is used to generate the path information. 
+   [PathNodeIDSettings] is used to set correct status in the side tree.
+   If you, for example, created "surveys" folder in "root/resources/surveys"
+   And the node ids are: 
+   + root:2
+   + resources:100
+   + surveys: 120
+
+   Then the ezsurvey.ini.append.php should look like:
+   [PathTextSettings]
+   PathText[]=ezpublish
+   PathText[]=Resources
+   PathText[]=Surveys
+    
+   [PathNodeIDSettings]
+   PathNodeID[]=2
+   PathNodeID[]=100
+   PathNodeID[]=120
+
+5. open settings/override.ini.append.php
+   Change "SURVEYS_FOLDER_NODE_ID" to the node id of "surveys" folder
+   Follow the comments to set up the override rules in corresponding files.
+
+6. clean up caches
+
+7. You can also change the navigation part for ezsurvey. This can be changed in modules/survey/module.php
+   (Change the default_navigation_part if necessary)
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 Troubleshooting
 ===============

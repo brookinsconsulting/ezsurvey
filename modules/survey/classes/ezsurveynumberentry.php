@@ -61,8 +61,8 @@ class eZSurveyNumberEntry extends eZSurveyEntry
         if ( $this->attribute( 'mandatory' ) == 1 && strlen( $answer ) == 0 )
         {
             $validation['error'] = true;
-            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question %number as well!', null,
-                                              array( '%number' => $this->questionNumber() ) );
+            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question ( %name ) as well!', null,
+	    array( '%number' => $this->questionNumber(),'%name'=>$this->attribute('text') ) );
             return;
         }
 
@@ -114,60 +114,66 @@ class eZSurveyNumberEntry extends eZSurveyEntry
                 {
                     if ( $reqInteger )
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question %number is not an integer number!', null,
-                                                          array( '%number' => $this->questionNumber() ) );
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question ( %name ) is not an integer number!', null,
+			array( '%number' => $this->questionNumber(),'%name'=>$this->attribute('text') ) );
                     }
                     else
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question %number is not a number!', null,
-                                                          array( '%number' => $this->questionNumber() ) );
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question ( %name ) is not a number!', null,
+			array( '%number' => $this->questionNumber(),'%name'=>$this->attribute('text') ) );
                     }
                 }
                 else if ( $min == false )
                 {
                     if ( $reqInteger )
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number is not integer or is not lower than or equal to %max!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name ) is not integer or is not lower than or equal to %max!', null,
                                                           array( '%number' => $this->questionNumber(),
-                                                                 '%max' => $maxText ) );
+                                                                 '%max' => $maxText,
+							         '%name'=>$this->attribute('text') ) );
                     }
                     else
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number must be lower than or equal to %max!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name ) must be lower than or equal to %max!', null,
                                                           array( '%number' => $this->questionNumber(),
-                                                                 '%max' => $maxText ) );
+                                                                 '%max' => $maxText,
+							         '%name'=>$this->attribute('text') ) );
                     }
                 }
                 else if ( $max == false )
                 {
                     if ( $reqInteger )
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number is not integer or is not greater than or equal to %min!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name ) is not integer or is not greater than or equal to %min!', null,
                                                           array( '%number' => $this->questionNumber(),
-                                                                 '%min' => $minText ) );
+                                                                 '%min' => $minText,
+							         '%name'=> $this->attribute('text') ) );
                     }
                     else
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number must be greater than or equal to %min!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name )  must be greater than or equal to %min!', null,
                                                           array( '%number' => $this->questionNumber(),
-                                                                 '%min' => $minText ) );
+                                                                 '%min' => $minText,
+							         '%name'=>$this->attribute('text') ) );
                     }
                 }
                 else
                 {
                     if ( $reqInteger )
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number is not integer or is not between %min and %max!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name ) is not integer or is not between %min and %max!', null,
                                                           array( '%number' => $this->questionNumber(),
                                                                  '%min' => $minText,
-                                                                 '%max' => $maxText ) );
+                                                                 '%max' => $maxText,
+							         '%name'=>$this->attribute('text') ) );
                     }
                     else
                     {
-                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question %number must be between %min and %max!', null,
+                        $validation['errors'][] = ezi18n( 'survey', 'Entered number in the question ( %name ) must be between %min and %max!', null,
                                                           array( '%number' => $this->questionNumber(),
                                                                  '%min' => $minText,
-                                                                 '%max' => $maxText ) );
+                                                                 '%max' => $maxText,
+							         '%name'=>$this->attribute('text') ) );
                     }
                 }
             } break;
@@ -177,13 +183,13 @@ class eZSurveyNumberEntry extends eZSurveyEntry
                 $validation['error'] = true;
                 if ( $reqInteger )
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question %number is not an integer number!', null,
-                                                      array( '%number' => $this->questionNumber() ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question ( %name ) is not an integer number!', null,
+		    array( '%number' => $this->questionNumber(),'%name'=>$this->attribute('text') ) );
                 }
                 else
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question %number is not a number!', null,
-                                                      array( '%number' => $this->questionNumber() ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question ( %name ) is not a number!', null,
+		    array( '%number' => $this->questionNumber(),'%name'=>$this->attribute('text') ) );
                 }
             } break;
         }
@@ -236,13 +242,13 @@ class eZSurveyNumberEntry extends eZSurveyEntry
                 $validation['error'] = true;
                 if ( $reqInteger )
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an integer number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an integer number!', null,
+		    array( '%number' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
                 else
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an number!', null,
+		    array( '%number' => $this->ID, '%name'=>$this->attribute('text') ) );
                 }
             }
         }
@@ -263,13 +269,13 @@ class eZSurveyNumberEntry extends eZSurveyEntry
                 $validation['error'] = true;
                 if ( $reqInteger )
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an integer number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an integer number!', null,
+		    array( '%number' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
                 else
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an number!', null,
+		    array( '%number' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
             }
         }
@@ -290,13 +296,13 @@ class eZSurveyNumberEntry extends eZSurveyEntry
                 $validation['error'] = true;
                 if ( $reqInteger )
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an integer number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an integer number!', null,
+		    array( '%number' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
                 else
                 {
-                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id %number is not an number!', null,
-                                                      array( '%number' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'Entered text in the question with id ( %name ) is not an number!', null,
+		    array( '%number' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
             }
         }

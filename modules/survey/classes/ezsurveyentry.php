@@ -54,8 +54,9 @@ class eZSurveyEntry extends eZSurveyQuestion
         if ( $this->attribute( 'mandatory' ) == 1 && strlen( trim ( $http->postVariable( 'SurveyAnswer_'.$this->ID ) ) ) == 0 )
         {
             $validation['error'] = true;
-            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question %number as well!', null,
-                                              array( '%number' => $this->questionNumber() ) );
+            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question ( %question ) as well!', null,
+	    array( '%number' => $this->questionNumber(),'%question'=> $this->attribute('text') ) );
+
         }
         $this->setAnswer( trim ( $http->postVariable( 'SurveyAnswer_'.$this->ID ) ) );
     }

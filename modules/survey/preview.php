@@ -50,16 +50,49 @@ if ( !$survey )
     return $Module->handleError( EZ_ERROR_KERNEL_NOT_AVAILABLE, 'kernel' );
 
 $res =& eZTemplateDesignResource::instance();
+
 $res->setKeys( array( array( 'survey', $surveyID ) ) );
 
 $tpl =& templateInit();
 
 $tpl->setVariable( 'preview', true );
+
 $tpl->setVariable( 'survey', $survey );
 
+$ini =& eZINI::instance('ezsurvey.ini');
+
+$path_text = $ini->variable( 'PathTextSettings', 'PathText' );
+
+$path_node_id = $ini->variable('PathNodeIDSettings','PathNodeID');
+
+$node = eZContentObjectTreeNode::fetch( $survey->attribute('node_id') );
+
+$tpl->setVariable('node',$node);
+
+$tpl->setVariable('content_template','design:survey/view.tpl');
+
+$tpl->setVariable('language_code',$node->CurrentLanguage);
+
 $Result = array();
-$Result['content'] =& $tpl->fetch( 'design:survey/view.tpl' );
-$Result['path'] = array( array( 'url' => false,
-                                'text' => ezi18n( 'survey', 'Survey Preview' ) ) );
+
+$Result['content'] =& $tpl->fetch( 'design:survey/full.tpl' );
+
+$Result['path']=array();
+
+for($i=0;$i<count($path_text);$i++){
+
+         $Result['path'][$i]['text']=$path_text[$i];
+
+}
+
+$Result['path'][count($path_text)]['text']=$node->attribute('name');
+
+for($i=0;$i<count($path_node_id);$i++){
+
+         $Result['path'][$i]['node_id']=$path_node_id[$i];
+
+}
+
+$Result['path'][count($path_text)]['node_id']=$node->attribute('node_id');
 
 ?>

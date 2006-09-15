@@ -42,23 +42,50 @@ include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyresult.php' );
 include_once( 'lib/ezutils/classes/ezmail.php' );
 include_once( 'lib/ezutils/classes/ezmailtransport.php' );
 
+
 $http =& eZHTTPTool::instance();
 
 $Module =& $Params['Module'];
+
 $surveyID =& $Params['SurveyID'];
 
 $survey =& eZSurvey::fetch( $surveyID );
 
-if ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() )
+$current_site_access = $GLOBALS['eZCurrentAccess'];
+
+$error = false;
+
+if($current_site_access['name']=='admin'){
+
+	$error = !$survey;
+
+}else{
+
+        $error = ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() );
+
+}
+
+if ( $error)
     return $Module->handleError( EZ_ERROR_KERNEL_NOT_AVAILABLE, 'kernel' );
 
 if ( $http->hasPostVariable( 'SurveyCancelButton' ) )
 {
-    $Module->redirectTo( $survey->attribute( 'redirect_cancel' ) );
+
+    if($current_site_access['name']!='admin'){
+
+       $Module->redirectTo( $survey->attribute( 'redirect_cancel' ) );
+
+    }else{
+
+       $Module->redirectTo('survey/list');
+
+    }
+
     return;
 }
 
 $validation = array();
+
 $survey->processViewActions( $validation );
 
 if ( $http->hasPostVariable( 'SurveyStoreButton' ) && $validation['error'] == false )
@@ -100,21 +127,67 @@ if ( $http->hasPostVariable( 'SurveyStoreButton' ) && $validation['error'] == fa
 
         $mailResult = eZMailTransport::send( $mail );
     }
-    $Module->redirectTo( $survey->attribute( 'redirect_submit' ) );
+
+    $current_site_access = $GLOBALS['eZCurrentAccess'];
+
+    if($current_site_access['name']!='admin'){
+
+       $Module->redirectTo( $survey->attribute( 'redirect_submit' ) );
+
+    }else{
+
+       $Module->redirectTo('survey/result/'.$surveyID);
+
+    }
+
 }
 
 $res =& eZTemplateDesignResource::instance();
+
 $res->setKeys( array( array( 'survey', $surveyID ) ) );
 
 $tpl =& templateInit();
 
 $tpl->setVariable( 'preview', false );
+
 $tpl->setVariable( 'survey', $survey );
+
 $tpl->setVariable( 'survey_validation', $validation );
 
+$ini =& eZINI::instance('ezsurvey.ini');
+
+$path_text = $ini->variable( 'PathTextSettings', 'PathText' );
+
+$path_node_id = $ini->variable('PathNodeIDSettings','PathNodeID');
+
+$node = eZContentObjectTreeNode::fetch( $survey->attribute('node_id'));
+
+$tpl->setVariable('node',$node);
+
+$tpl->setVariable('content_template','design:survey/view.tpl');
+
+$tpl->setVariable('language_code',$node->CurrentLanguage);
+
 $Result = array();
-$Result['content'] =& $tpl->fetch( 'design:survey/view.tpl' );
-$Result['path'] = array( array( 'url' => false,
-                                'text' => ezi18n( 'survey', 'Survey' ) ) );
+
+$Result['content'] =& $tpl->fetch( 'design:survey/full.tpl' );
+
+$Result['path']=array();
+
+for($i=0;$i<count($path_text);$i++){
+
+        $Result['path'][$i]['text']=$path_text[$i];
+
+}
+
+$Result['path'][count($path_text)]['text']=$node->attribute('name');
+
+for($i=0;$i<count($path_node_id);$i++){
+
+        $Result['path'][$i]['node_id']=$path_node_id[$i];
+
+}
+
+$Result['path'][count($path_node_id)]['node_id']=$node->attribute('node_id');
 
 ?>

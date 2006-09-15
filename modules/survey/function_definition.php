@@ -46,6 +46,11 @@ $FunctionList['survey'] = array( 'name' => 'survey',
                                                                  'type' => 'integer',
                                                                  'required' => true ) ) );
 
+$FunctionList['list'] = array( 'name' => 'list',
+                                 'call_method' => array( 'include_file' => 'extension/ezsurvey/modules/survey/classes/ezsurvey.php',
+                                                         'class' => 'eZSurvey',
+                                                         'method' => 'fetchList' ));
+
 $FunctionList['multiple_choice_result'] = array( 'name' => 'multiple_choice_result' ,
                                                  'call_method' => array( 'include_file' => 'extension/ezsurvey/modules/survey/classes/ezsurveymultiplechoice.php',
                                                                          'class' => 'eZSurveyMultipleChoice',

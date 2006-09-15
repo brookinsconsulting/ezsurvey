@@ -1,0 +1,28 @@
+# Installation
+1. Copy ezsury to your extension folder
+2. Activate it in your site.ini.append.php file
+3. Make sure "survey" class doesn't exist
+4. Import ezsurvey.ezpkg
+5. Create a folder called "Surveys" (In fact, you can change the name)
+ 5.1 If you are using "tools" tab extension, we recommend you create 
+     it as "tools/resouces/surveys"
+6. Remember the node_id and node_text of each node in the full path to surveys folder.
+   And change the ezsurvey.ini.append.php accordingly
+7. Change the override rules in override.ini.append.php and apply the rules to corresponding files
+8. If you are using "tools" tab extension, since "tools" tab uses its own navigation part, you are supposed to 
+   change the navigation part in ezsurvey/modules/module.php
+9. Cleanup caches
+10. Signon at backend and access the "surveys" folder
+11. Now you can manage surveys under survey folder in a standard ezpublish way.
+
+*NOTE 
+since ezsurvey extension is not using ezpublish content object model, it's impossible to integrate it 
+with ezpublish directly. That's why we created the "survey" class as a wrapper between ezpublish and ezsurvey. 
+So the surveys you see under the "surveys" folder are not the "ezsurvey" records, but the "survey" wrapper records.
+But we've changed the code base, so that when you open a "survey" wrapper record, you will see the real ezsurvey contents but not the "survey" wrapper contents. In fact, you can totally ignore the "survey" warpper. 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+However, I didn't change the code base of the "popup menu" in "node tree", so if you click on 
+the "popup menu" in "node tree" window, it still brings up the "survey" wrapper record.
+It provides an advanced way to change the "survey" wrapper record. But We also highly recommend you not 
+changing the "survey" wrapper record in this way.
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/

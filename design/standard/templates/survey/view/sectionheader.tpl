@@ -1,1 +1,1 @@
-<h2>{$question.text|wash('xhtml')}</h2>
+<b>{$question.text|wash('xhtml')}</b>

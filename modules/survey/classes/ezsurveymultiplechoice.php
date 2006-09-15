@@ -190,8 +190,8 @@ class eZSurveyMultipleChoice extends eZSurveyQuestion
              $this->attribute( 'num' ) != 4 )           // 4 - checkboxes in a column
         {
             $validation['error'] = true;
-            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question %number as well!', null,
-                                              array( '%number' => $this->questionNumber() ) );
+            $validation['errors'][] = ezi18n( 'survey', 'Please answer the question ( %question ) as well!', null,
+	    array( '%number' => $this->questionNumber(),'%question'=>$this->attribute('text') ) );
         }
         else
         {
@@ -256,8 +256,8 @@ class eZSurveyMultipleChoice extends eZSurveyQuestion
                 if ( strlen( $option['value'] ) == 0 )
                 {
                     $validation['error'] = true;
-                    $validation['errors'][] = ezi18n( 'survey', 'You must enter the value for an option in the question with id %question!', null,
-                                              array( '%question' => $this->ID ) );
+                    $validation['errors'][] = ezi18n( 'survey', 'You must enter the value for an option in the question with id %question ( %name ) !', null,
+		    array( '%question' => $this->ID,'%name'=>$this->attribute('text') ) );
                 }
                 if ( $http->postVariable( 'SurveyMC_'.$this->ID.'_'.$optionID.'_Value' ) != $option['value'] )
                     $this->setHasDirtyData( true );
@@ -284,8 +284,8 @@ class eZSurveyMultipleChoice extends eZSurveyQuestion
             if ( in_array( $option['value'], $optionValues ) )
             {
                 $validation['error'] = true;
-                $validation['errors'][] = ezi18n( 'survey', 'Options in the question with id %question must have unique values!', null,
-                                                  array( '%question' => $this->ID ) );
+                $validation['errors'][] = ezi18n( 'survey', 'Options in the question with id %question ( %name ) must have unique values!', null,
+		array( '%question' => $this->ID,'%name'=>$this->attribute('name') ) );
                 break;
             }
             $optionValues[] = $option['value'];
@@ -293,8 +293,8 @@ class eZSurveyMultipleChoice extends eZSurveyQuestion
         if ( $optionCount == 0 )
         {
             $validation['error'] = true;
-            $validation['errors'][] = ezi18n( 'survey', 'You must enter at least one option in the question with id %question!', null,
-                                              array( '%question' => $this->ID ) );
+            $validation['errors'][] = ezi18n( 'survey', 'You must enter at least one option in the question with id %question ( %name ) !', null,
+	    array( '%question' => $this->ID,'%name'=>$this->attribute('text') ) );
         }
         if ( $http->hasPostVariable( 'SurveyMC_'.$this->ID.'_NewOption' ) )
         {

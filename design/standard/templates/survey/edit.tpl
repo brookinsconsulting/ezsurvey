@@ -1,6 +1,6 @@
 <form enctype="multipart/form-data" method="post" action={concat("/survey/edit/",$survey.id)|ezurl}>
-
-<input type="hidden" name="SurveyID" value="$survey.id" />
+ 
+<input type="hidden" name="SurveyID" value="{$survey.id}" />
 
 <table class="layout" border="0" cellspacing="0" cellpadding="5">
 
@@ -15,12 +15,12 @@
 
 <tr>
     <td valign="top">
-    <label>{'Survey title'|i18n( 'survey' )}</label><div class="labelbreak"></div>
-    <input type="text" name="SurveyTitle" value="{$survey.title|wash('xhtml')}" size="70" />
+    <label for="SurveyTitle">{'Survey title'|i18n( 'survey' )}</label><div class="labelbreak"></div>
+    <input id="SurveyTitle" type="text" name="SurveyTitle" value="{$survey.title|wash('xhtml')}" size="70" />
     </td>
     <td valign="top" align="center">
-    <label>{'Enabled'|i18n( 'survey' )}</label><div class="labelbreak"></div>
-    <input type="checkbox" name="SurveyEnabled" {section show=$survey.enabled|eq(1)}checked="checked"{/section} />
+    <label for="SurveyEnabled">{'Enabled'|i18n( 'survey' )}</label><div class="labelbreak"></div>
+    <input id="SurveyEnabled" type="checkbox" name="SurveyEnabled" {section show=$survey.enabled|eq(1)}checked="checked"{/section} />
     </td>
 </tr>
 
@@ -28,13 +28,19 @@
     <td valign="top" colspan="2">
     <label>{'Valid from'|i18n('survey')}</label>
     <table border="0">
-    <tr><td>{'Year'|i18n( 'survey' )}</td><td>{'Month'|i18n( 'survey' )}</td><td>{'Day'|i18n( 'survey' )}</td><td>{'Hour'|i18n( 'survey' )}</td><td>{'Minute'|i18n( 'survey' )}</td></tr>
     <tr>
-      <td><input name="SurveyValidFromYear" size="5" value="{$survey.valid_from_array.year}" /></td>
-      <td><input name="SurveyValidFromMonth" size="3" value="{$survey.valid_from_array.month}" /></td>
-      <td><input name="SurveyValidFromDay" size="3" value="{$survey.valid_from_array.day}" /></td>
-      <td><input name="SurveyValidFromHour" size="3" value="{$survey.valid_from_array.hour}" /></td>
-      <td><input name="SurveyValidFromMinute" size="3" value="{$survey.valid_from_array.minute}" /></td>
+	<td>
+	<label for="SurveyValidFromYear">{'Year'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidFromMonth">{'Month'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidFromDay">{'Day'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidFromHour">{'Hour'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidFromMinute">{'Minute'|i18n( 'survey' )}</label></td></tr>
+    <tr>
+      <td><input id="SurveyValidFromYear" name="SurveyValidFromYear" size="5" value="{$survey.valid_from_array.year}" /></td>
+      <td><input id="SurveyValidFromMonth" name="SurveyValidFromMonth" size="3" value="{$survey.valid_from_array.month}" /></td>
+      <td><input id="SurveyValidFromDay" name="SurveyValidFromDay" size="3" value="{$survey.valid_from_array.day}" /></td>
+      <td><input id="SurveyValidFromHour" name="SurveyValidFromHour" size="3" value="{$survey.valid_from_array.hour}" /></td>
+      <td><input id="SurveyValidFromMinute" name="SurveyValidFromMinute" size="3" value="{$survey.valid_from_array.minute}" /></td>
     </tr>
     <tr>
       <td colspan="5"><input type="checkbox" name="SurveyValidFromNoLimit" value="1" {section show=$survey.valid_from_array.no_limit}checked{/section} /> {'No limitation'|i18n( 'survey' )}</td>
@@ -47,13 +53,18 @@
     <td valign="top" colspan="2">
     <label>{'Valid to'|i18n('survey')}</label>
     <table border="0">
-    <tr><td>{'Year'|i18n( 'survey' )}</td><td>{'Month'|i18n( 'survey' )}</td><td>{'Day'|i18n( 'survey' )}</td><td>{'Hour'|i18n( 'survey' )}</td><td>{'Minute'|i18n( 'survey' )}</td></tr>
+    <tr><td>
+	<label for="SurveyValidToYear">{'Year'|i18n( 'survey' )}<label></td>
+	<td><label for="SurveyValidToMonth">{'Month'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidToDay">{'Day'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidToHour">{'Hour'|i18n( 'survey' )}</label></td>
+	<td><label for="SurveyValidToMinute">{'Minute'|i18n( 'survey' )}</label></td></tr>
     <tr>
-      <td><input name="SurveyValidToYear" size="5" value="{$survey.valid_to_array.year}" /></td>
-      <td><input name="SurveyValidToMonth" size="3" value="{$survey.valid_to_array.month}" /></td>
-      <td><input name="SurveyValidToDay" size="3" value="{$survey.valid_to_array.day}" /></td>
-      <td><input name="SurveyValidToHour" size="3" value="{$survey.valid_to_array.hour}" /></td>
-      <td><input name="SurveyValidToMinute" size="3" value="{$survey.valid_to_array.minute}" /></td>
+      <td><input id="SurveyValidToYear" name="SurveyValidToYear" size="5" value="{$survey.valid_to_array.year}" /></td>
+      <td><input id="SurveyValidToMonth" name="SurveyValidToMonth" size="3" value="{$survey.valid_to_array.month}" /></td>
+      <td><input id="SurveyValidToDay" name="SurveyValidToDay" size="3" value="{$survey.valid_to_array.day}" /></td>
+      <td><input id="SurveyValidToHour" name="SurveyValidToHour" size="3" value="{$survey.valid_to_array.hour}" /></td>
+      <td><input id="SurveyValidToMinute" name="SurveyValidToMinute" size="3" value="{$survey.valid_to_array.minute}" /></td>
     </tr>
     <tr>
       <td colspan="5"><input type="checkbox" name="SurveyValidToNoLimit" value="1" {section show=$survey.valid_to_array.no_limit}checked{/section} /> {'No limitation'|i18n( 'survey' )}</td>
@@ -64,19 +75,19 @@
 
 <tr>
     <td valign="top" colspan="2">
-    {'After "Cancel" redirect to URL'|i18n('survey')} <input name="SurveyRedirectCancel" size="30" value="{$survey.redirect_cancel|wash('xhtml')}" />
+		<label for="SurveyRedirectCancel">{'After "Cancel" redirect to URL'|i18n('survey')}</label> <input id="SurveyRedirectCancel" name="SurveyRedirectCancel" size="30" value="{$survey.redirect_cancel|wash('xhtml')}" />
     </td>
 </tr>
 
 <tr>
     <td valign="top" colspan="2">
-    {'After "Submit" redirect to URL'|i18n('survey')} <input name="SurveyRedirectSubmit" size="30" value="{$survey.redirect_submit|wash('xhtml')}" />
+		<label for="SurveyRedirectSubmit">{'After "Submit" redirect to URL'|i18n('survey')}</label> <input name="SurveyRedirectSubmit" size="30" value="{$survey.redirect_submit|wash('xhtml')}" />
     </td>
 </tr>
 
 <tr>
     <td valign="top" colspan="2">
-    <input type="checkbox" name="SurveyPersistent" {section show=$survey.persistent|eq(1)}checked="checked"{/section} /> {'Persistent user input. ( Users will be able to edit survey later. )'|i18n('survey')}
+		<input type="checkbox" name="SurveyPersistent" {section show=$survey.persistent|eq(1)}checked="checked"{/section} /> {'Persistent user input. ( Users will be able to edit survey later. )'|i18n('survey')}
     </td>
 </tr>
 

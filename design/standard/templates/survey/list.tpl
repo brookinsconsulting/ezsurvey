@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" method="post" action={"/survey/list"|ezurl}>
+<form enctype="multipart/form-data" method="post" name="survey_list_form" action={"/survey/list"|ezurl}>
 
 <h1>{"Survey List"|i18n('survey')}</h1>
 
@@ -54,8 +54,8 @@
 {/section}
 </table>
 
-<div class="buttonblock">
-<input class="defaultbutton" type="submit" name="SurveyNewSurveyButton" value="{'New Survey'|i18n( 'survey' )}" />
+<div class="buttonblock" style="margin-top:4px;">
+<input type="submit" class="button" name="SurveyNewSurveyButton" value="{'New Survey'|i18n( 'survey' )}" />
 </div>
 
 </form>

@@ -39,16 +39,33 @@ include_once( 'kernel/common/template.php' );
 include_once( 'extension/ezsurvey/modules/survey/classes/ezsurvey.php' );
 include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyresult.php' );
 //include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyreceiver.php' );
+include_once( 'kernel/classes/ezcontentobject.php' );
+include_once( 'kernel/classes/ezcontentobjecttreenode.php' );
+include_once( 'kernel/classes/ezcontentbrowse.php' );
+include_once( 'kernel/classes/ezcontentbrowsebookmark.php' );
+include_once( 'kernel/classes/ezcontentclass.php' );
+include_once( 'lib/ezdb/classes/ezdb.php');
+include_once( 'lib/ezutils/classes/ezhttptool.php' );
+include_once( 'lib/ezutils/classes/ezini.php' );
+include_once( 'kernel/classes/datatypes/ezuser/ezuser.php' );
+include_once( 'kernel/content/ezcontentoperationcollection.php');
 
 $http =& eZHTTPTool::instance();
 
 $Module =& $Params['Module'];
 
-if ( $http->hasPostVariable( 'SurveyNewSurveyButton' ) )
-{
+$view =& $Params['FunctionName'];
+
+if ( $http->hasPostVariable( 'SurveyNewSurveyButton' ) ){
+ 
     $newSurvey = new eZSurvey();
+
     $newSurvey->store();
+
     $Module->redirectTo( '/survey/edit/'.$newSurvey->attribute( 'id' ) );
+
+    return;
+
 }
 
 $surveyList =& eZSurvey::fetchSurveyList();
@@ -57,8 +74,38 @@ $tpl =& templateInit();
 
 $tpl->setVariable( 'survey_list', $surveyList );
 
+$ini =& eZINI::instance('ezsurvey.ini');
+
+$path_text = $ini->variable( 'PathTextSettings', 'PathText' );
+
+$path_node_id = $ini->variable('PathNodeIDSettings','PathNodeID');
+
+$node_id = $path_node_id[count($path_node_id)-1];
+
+$node = eZContentObjectTreeNode::fetch( $node_id );
+
+$tpl->setVariable('node',$node);
+
+$tpl->setVariable('content_template','design:survey/list.tpl');
+
+$tpl->setVariable('language_code',$node->CurrentLanguage);
+
 $Result = array();
-$Result['content'] =& $tpl->fetch( 'design:survey/list.tpl' );
-$Result['path'] = array( array( 'url' => false,
-                                'text' => ezi18n( 'survey', 'Survey' ) ) );
+
+$Result['content'] =& $tpl->fetch( 'design:survey/full.tpl' );
+
+$Result['path']=array();
+
+for($i=0;$i<count($path_text);$i++){
+
+         $Result['path'][$i]['text']=$path_text[$i];
+
+}
+
+for($i=0;$i<count($path_node_id);$i++){
+
+        $Result['path'][$i]['node_id']=$path_node_id[$i];
+
+}
+
 ?>

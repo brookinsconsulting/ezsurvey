@@ -38,6 +38,17 @@
 include_once( 'kernel/classes/ezpersistentobject.php' );
 include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyquestion.php' );
 include_once( 'extension/ezsurvey/modules/survey/classes/ezsurveyquestions.php' );
+include_once( 'kernel/classes/ezcontentobject.php' );
+include_once( 'kernel/classes/ezcontentobjecttreenode.php' );
+include_once( 'kernel/classes/ezcontentbrowse.php' );
+include_once( 'kernel/classes/ezcontentbrowsebookmark.php' );
+include_once( 'kernel/classes/ezcontentclass.php' );
+include_once( 'lib/ezdb/classes/ezdb.php');
+include_once( 'lib/ezutils/classes/ezhttptool.php' );
+include_once( 'lib/ezutils/classes/ezini.php' );
+include_once( 'kernel/classes/datatypes/ezuser/ezuser.php' );
+include_once( 'kernel/content/ezcontentoperationcollection.php');
+
 
 class eZSurvey extends eZPersistentObject
 {
@@ -88,7 +99,12 @@ class eZSurvey extends eZPersistentObject
                                          'redirect_submit' => array( 'name' => 'RedirectSubmit',
                                                               'datatype' => 'string',
                                                               'default' => '/content/view/full/2',
-                                                              'required' => true ) ),
+                                                              'required' => true ),
+                                         'node_id' => array( 'name' => 'NodeID',
+                                                              'datatype' => 'integer',
+                                                              'default' => '0',
+                                                              'required' => false )
+						      ),
                       'keys' => array( 'id' ),
                       'function_attributes' => array( 'question_results' => 'fetchQuestionResultList',
                                                       'result_count' => 'resultCount',
@@ -185,9 +201,31 @@ class eZSurvey extends eZPersistentObject
     function &fetchSurvey( $id )
     {
         $survey =& eZSurvey::fetch( $id );
-        if ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() )
+        //if ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() )
+        $current_site_access = $GLOBALS['eZCurrentAccess'];
+
+        $error = false;
+
+        if($current_site_access['name']=='admin'){
+
+	   $error = !$survey;
+
+        }else{
+
+           $error = ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() );
+
+        }
+
+        if ( $error)
             $survey = false;
+
         return array( 'result' => $survey );
+    }
+
+    function &fetchList()
+    {
+        $surveys=& eZSurvey::fetchSurveyList();
+        return array( 'result' => $surveys );
     }
 
     /*!
@@ -484,6 +522,8 @@ class eZSurvey extends eZPersistentObject
         $db = eZDB::instance();
         $db->begin();
 
+	$node_id = $this->NodeID;
+
         $rows = $db->arrayQuery( "select id from ezsurveyresult where survey_id=".$this->ID );
         $results = false;
         foreach( $rows as $row )
@@ -507,6 +547,18 @@ class eZSurvey extends eZPersistentObject
             $db->query( "delete from ezsurveyquestionresult where result_id in ".$resultIDString );
             $db->query( "delete from ezsurveymetadata where result_id in ".$resultIDString );
         }
+
+  	$object = eZContentObject::fetchByNodeID($node_id);
+
+	if($object){
+
+	   $object_id = $object->attribute('id');
+
+	   $object->removeReverseRelations($object_id);
+
+	   eZContentObjectTreeNode::removeSubtrees(array($node_id),false);
+
+	}
 
         $db->commit();
     }
@@ -554,6 +606,146 @@ class eZSurvey extends eZPersistentObject
         return $this->dateTimeArray( $this->ValidTo );
     }
 
+    function store(){
+
+	     if($this->NodeID==0){
+
+	        parent::store();
+
+                $identifier = 'survey';
+
+                $class =& eZContentClass::fetchByIdentifier($identifier);
+
+                $class_id = $class->attribute('id');
+
+                $ini =& eZINI::instance('ezsurvey.ini');
+
+                $path_node_id = $ini->variable('PathNodeIDSettings','PathNodeID');
+
+                $p_node_id = $path_node_id[count($path_node_id)-1];
+
+                $p_node =& eZContentObjectTreeNode::fetch($p_node_id);
+
+                $p_object =& $p_node->attribute('object');
+
+                $user =& eZUser::currentUser();
+
+                $user_id =& $user->attribute('contentobject_id');
+
+                $section_id = $p_object->attribute('section_id');
+
+                $db =& ezDB::instance();
+
+                $db->begin();
+
+                $object =& $class->instantiate($user_id,$section_id);
+
+                $attributes  =& $object->contentObjectAttributes(
+			                 true,
+                                         $object->attribute('current_version'),
+				         null,
+				         false);
+    
+                foreach ( array_keys( $attributes ) as $key ){
+
+                          $attribute =& $attributes[$key];
+
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_number'){
+
+			     $attribute->setAttribute('data_int',$this->ID);
+
+		             $attribute->store();
+
+	                  }
+
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_name'){
+
+			     $survey_name = $this->Title==''?'Survey no. '.$this->ID:$this->Title;
+
+			     $attribute->setAttribute('data_text',$survey_name);
+
+		             $attribute->store();
+	                  }
+
+                }
+
+		$object->store();
+
+                $node_assign =& eZNodeAssignment::create(
+			         array('contentobject_id' => $object->attribute('id'),
+                                       'contentobject_version' => $object->attribute( 'current_version' ),
+				       'parent_node' => $p_node->attribute( 'node_id' ),
+				       'is_main' => 1)
+		                 );
+
+
+                $node_assign->store();
+
+                $db->commit();
+
+                eZContentOperationCollection::publishNode(
+			                      $node_assign->attribute('parent_node'), 
+                                              $object->attribute('id'),
+					      $object->attribute('current_version'),
+					      null);
+
+                $this->NodeID = $object->attribute('main_node_id');
+
+		parent::store();
+
+	     }else{
+
+		$node =& eZContentObjectTreeNode::fetch($this->NodeID);
+
+                $object =& $node->attribute('object');
+
+                $attributes  =& $object->contentObjectAttributes(
+			                 true,
+                                         $object->attribute('current_version'),
+				         null,
+				         false);
+
+                $db =& ezDB::instance();
+
+                $db->begin();
+
+                foreach ( array_keys( $attributes ) as $key ){
+
+                          $attribute =& $attributes[$key];
+
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_number'){
+
+			     $attribute->setAttribute('data_int',$this->ID);
+
+		             $attribute->store();
+
+	                  }
+
+
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_name'){
+
+				  $survey_name = $this->Title==''?'Survey no. '.$this->ID:$this->Title;
+
+				  $attribute->setAttribute('data_text',$survey_name);
+
+		                  $attribute->store();
+	                  }
+
+                }
+
+                $db->commit();
+
+                eZContentOperationCollection::publishNode($node->attribute('parent_node_id'), 
+                                              $object->attribute('id'),
+					      $object->attribute('current_version'),
+					      $this->NodeID);
+
+                parent::store();
+
+	   }
+
+    }
+
     var $ID;
     var $Title;
     var $Enabled;
@@ -563,6 +755,8 @@ class eZSurvey extends eZPersistentObject
     var $ValidTo;
     var $RedirectCancel;
     var $RedirectSubmit;
+    var $NodeID = 0;
+
 }
 
 ?>

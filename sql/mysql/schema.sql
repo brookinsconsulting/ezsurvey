@@ -8,6 +8,7 @@ CREATE TABLE ezsurvey (
     redirect_submit varchar(255) DEFAULT '' NOT NULL,
     published int(11) DEFAULT 0 NOT NULL,
     persistent int(11) DEFAULT 0 NOT NULL,
+    node_id    int(11) DEFAULT 0 NOT NULL,
     PRIMARY KEY (id)
 ) TYPE=MyISAM;
 

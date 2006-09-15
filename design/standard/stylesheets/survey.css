@@ -1,7 +1,90 @@
 /* CSS for the survey module */
 
 /* Labels in survey forms should wrap (core.css says nowrap) */
-div.survey label
-{ 
-    white-space: normal;
+*> div.end-button {
+	width:432px;
+	background:#edf3fa;
 }
+
+* html div.end-button {
+	width:432px;
+	background:#edf3fa;
+}
+
+
+div.survey {
+	width:432px;
+	background:white;
+	margin:8px 0px 0px 0px;
+}
+
+div.survey form div.survey-block{
+   width:424px;
+   margin:0px;
+   padding-top:10px;
+   padding-left:8px;
+   font-size:95%;
+}
+div.survey form div.survey-block div.input{
+	float:left;
+	width:260px;
+}
+div.survey form div.survey-block label.intro {
+	float:left;
+	width:110px;
+	white-space: normal;
+	margin:0px 5px 0px 0px;
+}
+* html div.survey form div.survey-block label.txt {
+	float:left;
+	width:230px;
+	white-space: normal;
+	margin:2px 0px 0px 5px;
+}
+*> div.survey form div.survey-block label.txt {
+	float:left;
+	width:230px;
+	white-space: normal;
+	margin:-1px 0px 0px 10px;
+}
+div.survey form div.survey-block textarea {
+    float:left;
+    border:1px solid #92979B;
+    width:260px;
+	margin:0px;
+}
+div.survey form div.survey-block select {
+    float:left;
+    border:1px solid #92979B;
+	margin:0px;
+}
+div.survey form div.survey-block input {
+	float:left;
+	border:none;
+	margin:0px;
+}
+*> div.survey form div.survey-block div.child{
+	margin-top:5px;
+}
+div.survey form div.survey-block input.text {
+    border:1px solid #92979B;
+	width:260px;
+}
+div.survey form div.survey-block input.radio {
+	width:10px;
+}
+div.survey form div.survey-block input.checkbox {
+	width:10px;
+}
+* html div.survey form div.block-end{
+   width:432px;
+}
+*> div.survey form div.block-end{
+   width:432px;
+}
+/*
+p{margin:0px 20px 0px 0px} 
+*/
+
+
+
