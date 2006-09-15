@@ -159,6 +159,11 @@ class eZSurveyReceiver extends eZSurveyQuestion
             $option->appendChild( $optionChecked );
 
             $root->appendChild( $option );
+
+            unset( $option );
+            unset( $optionLabel );
+            unset( $optionValue );
+            unset( $optionChecked );
         }
         $this->Text2 =& $doc->toString();
     }
