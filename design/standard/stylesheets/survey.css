@@ -1,0 +1,7 @@
+/* CSS for the survey module */
+
+/* Labels in survey forms should wrap (core.css says nowrap) */
+div.survey label
+{ 
+    white-space: normal;
+}

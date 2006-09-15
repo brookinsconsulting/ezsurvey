@@ -1,0 +1,2 @@
+[CustomTagSettings]
+AvailableCustomTags[]=survey
