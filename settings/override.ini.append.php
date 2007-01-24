@@ -4,7 +4,7 @@
 # admin
 #[survey_folder]
 #Source=node/view/full.tpl
-#MatchFile=admin_preview/survey_folder.tpl
+#MatchFile=survey/list.tpl
 #Subdir=templates
 #Match[node]=SURVEYS_FOLDER_NODE_ID
 

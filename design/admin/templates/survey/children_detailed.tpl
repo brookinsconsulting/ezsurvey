@@ -45,7 +45,8 @@
         <td>{$Nodes.item.object.data_map.survey_number.data_int}</td>
 
         {* Survey Title *}
-        {set $child_survey=fetch('survey','survey',hash('id',$Nodes.item.data_map.survey_number.data_int))}
+        {def $child_survey=fetch('survey','survey',hash('id',$Nodes.item.data_map.survey_number.data_int))}
+        
         <td>{include uri="design:survey/line.tpl"}</td>
 
         {* Enabled *}

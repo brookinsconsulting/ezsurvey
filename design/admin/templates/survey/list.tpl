@@ -1,3 +1,5 @@
+{set-block scope=global variable=cache_ttl}0{/set-block}
+{def survey_list=fetch('survey','list')}
 {include uri='design:infocollection_validation.tpl'}
 
 <div class="content-navigation">
@@ -103,5 +105,6 @@
 
 </div>
 
+{include uri="design:survey/windows.tpl"}
 
 </div>

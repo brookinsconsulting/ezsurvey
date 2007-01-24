@@ -92,7 +92,7 @@ $tpl->setVariable('language_code',$node->CurrentLanguage);
 
 $Result = array();
 
-$Result['content'] =& $tpl->fetch( 'design:survey/full.tpl' );
+$Result['content'] =& $tpl->fetch( 'design:survey/list.tpl' );
 
 $Result['path']=array();
 

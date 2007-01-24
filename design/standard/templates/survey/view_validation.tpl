@@ -14,5 +14,4 @@
 {/section}
 </ul>
 </div>
-<br />
 {/section}

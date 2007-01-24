@@ -133,7 +133,7 @@
 <tr>
     <td colspan="2" valign="bottom" height="70">
     <div class="buttonblock">
-    <input class="defaultbutton" type="submit" name="SurveyPublishButton" value="{'Publish'|i18n( 'survey' )}" />
+    <input class="button" type="submit" name="SurveyPublishButton" value="{'Publish'|i18n( 'survey' )}" />
     <input class="button" type="submit" name="SurveyApplyButton" value="{'Apply'|i18n( 'survey' )}"  />
     <input class="button" type="submit" name="SurveyPreviewButton" value="{'Apply and Preview'|i18n( 'survey' )}"  />
     <input class="button" type="submit" name="SurveyDiscardButton" value="{'Discard'|i18n( 'survey' )}" />

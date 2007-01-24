@@ -62,7 +62,7 @@ class eZSurvey extends eZPersistentObject
         $this->QuestionList = null;
     }
 
-    function &definition()
+    function definition()
     {
         return array( 'fields' => array( 'id' => array( 'name' => 'ID',
                                                         'datatype' => 'integer',
@@ -200,13 +200,16 @@ class eZSurvey extends eZPersistentObject
     */
     function &fetchSurvey( $id )
     {
-        $survey =& eZSurvey::fetch( $id );
+        $survey = eZSurvey::fetch( $id );
         //if ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() )
         $current_site_access = $GLOBALS['eZCurrentAccess'];
 
         $error = false;
-
-        if($current_site_access['name']=='admin'){
+        /*
+            This static crap needs implrovement :-)
+        */
+        if( strstr( $current_site_access['name'], 'admin' ) >= 0 ) 
+        {
 
 	   $error = !$survey;
 
@@ -606,15 +609,16 @@ class eZSurvey extends eZPersistentObject
         return $this->dateTimeArray( $this->ValidTo );
     }
 
-    function store(){
-
-	     if($this->NodeID==0){
-
+    function store()
+    {
+         include_once( 'lib/ezutils/classes/ezoperationhandler.php' ); 
+	     if( $this->NodeID==0 )
+	     {
 	        parent::store();
 
                 $identifier = 'survey';
 
-                $class =& eZContentClass::fetchByIdentifier($identifier);
+                $class = eZContentClass::fetchByIdentifier($identifier);
 
                 $class_id = $class->attribute('id');
 
@@ -624,13 +628,13 @@ class eZSurvey extends eZPersistentObject
 
                 $p_node_id = $path_node_id[count($path_node_id)-1];
 
-                $p_node =& eZContentObjectTreeNode::fetch($p_node_id);
+                $p_node = eZContentObjectTreeNode::fetch($p_node_id);
 
-                $p_object =& $p_node->attribute('object');
+                $p_object = $p_node->attribute('object');
 
-                $user =& eZUser::currentUser();
+                $user = eZUser::currentUser();
 
-                $user_id =& $user->attribute('contentobject_id');
+                $user_id = $user->attribute('contentobject_id');
 
                 $section_id = $p_object->attribute('section_id');
 
@@ -638,40 +642,28 @@ class eZSurvey extends eZPersistentObject
 
                 $db->begin();
 
-                $object =& $class->instantiate($user_id,$section_id);
+                $object = $class->instantiate($user_id,$section_id);
 
-                $attributes  =& $object->contentObjectAttributes(
-			                 true,
-                                         $object->attribute('current_version'),
-				         null,
-				         false);
+                $attributes = $object->allContentObjectAttributes( $object->attribute('id') );
     
-                foreach ( array_keys( $attributes ) as $key ){
-
-                          $attribute =& $attributes[$key];
-
-	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_number'){
-
-			     $attribute->setAttribute('data_int',$this->ID);
-
-		             $attribute->store();
-
+                foreach ( array_keys( $attributes ) as $key )
+                {
+                      $attribute =& $attributes[$key];
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_number')
+	                  {
+        			     $attribute->setAttribute('data_int',$this->ID);
+    		             $attribute->store();
 	                  }
-
-	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_name'){
-
-			     $survey_name = $this->Title==''?'Survey no. '.$this->ID:$this->Title;
-
-			     $attribute->setAttribute('data_text',$survey_name);
-
-		             $attribute->store();
+	                  if($attribute->attribute('contentclass_attribute_identifier')=='survey_name')
+	                  {
+        			     $survey_name = $this->Title==''?'Survey no. '.$this->ID:$this->Title;
+        			     $attribute->setAttribute('data_text',$survey_name);
+    		             $attribute->store();
 	                  }
-
                 }
+        		$object->store();
 
-		$object->store();
-
-                $node_assign =& eZNodeAssignment::create(
+                $node_assign = eZNodeAssignment::create(
 			         array('contentobject_id' => $object->attribute('id'),
                                        'contentobject_version' => $object->attribute( 'current_version' ),
 				       'parent_node' => $p_node->attribute( 'node_id' ),
@@ -683,23 +675,23 @@ class eZSurvey extends eZPersistentObject
 
                 $db->commit();
 
-                eZContentOperationCollection::publishNode(
-			                      $node_assign->attribute('parent_node'), 
-                                              $object->attribute('id'),
-					      $object->attribute('current_version'),
-					      null);
-
+			     $operationResult = eZOperationHandler::execute(
+				'content', 'publish', array(
+							'object_id' => $object->attribute( 'id' ),
+							'version' => $object->attribute( 'current_version' ) 
+				));
+                $object = eZContentObject::fetch( $object->attribute('id') );
                 $this->NodeID = $object->attribute('main_node_id');
 
-		parent::store();
+		        parent::store();
 
 	     }else{
 
-		$node =& eZContentObjectTreeNode::fetch($this->NodeID);
+		$node = eZContentObjectTreeNode::fetch($this->NodeID);
 
-                $object =& $node->attribute('object');
+                $object = $node->attribute('object');
 
-                $attributes  =& $object->contentObjectAttributes(
+                $attributes = $object->contentObjectAttributes(
 			                 true,
                                          $object->attribute('current_version'),
 				         null,
@@ -734,11 +726,11 @@ class eZSurvey extends eZPersistentObject
                 }
 
                 $db->commit();
-
-                eZContentOperationCollection::publishNode($node->attribute('parent_node_id'), 
-                                              $object->attribute('id'),
-					      $object->attribute('current_version'),
-					      $this->NodeID);
+			    $operationResult = eZOperationHandler::execute(
+				'content', 'publish', array(
+							'object_id' => $object->attribute( 'id' ),
+							'version' => $object->attribute( 'current_version' ) 
+				));
 
                 parent::store();
 

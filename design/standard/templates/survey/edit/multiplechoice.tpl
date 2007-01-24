@@ -36,7 +36,7 @@
 </table>
 
 <div class="buttonblock">
-<input class="smallbutton" type="submit" name="SurveyMC_{$question.id}_NewOption" value="{'New option'|i18n( 'survey' )}" />
-<input class="smallbutton" type="submit" name="SurveyMC_{$question.id}_RemoveSelected" value="{'Remove selected'|i18n( 'survey' )}" />
+<input class="button" type="submit" name="SurveyMC_{$question.id}_NewOption" value="{'New option'|i18n( 'survey' )}" />
+<input class="button" type="submit" name="SurveyMC_{$question.id}_RemoveSelected" value="{'Remove selected'|i18n( 'survey' )}" />
 </div>
 </div>

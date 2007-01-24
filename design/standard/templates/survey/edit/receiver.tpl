@@ -1,12 +1,13 @@
 <h2>{"Receiver"|i18n( 'survey' )} (id {$question.id})</h2>
 
-<div class="block">
+<p>
 {"N. B. If you enter just one email address, user will not see this question. Instead the posting
 will be directly sent to the address."|i18n( 'survey' )}
-<br />
+</p>
+<p>
 <label>{"Text of question"|i18n( 'survey' )}</label><div class="labelbreak"></div>
 <input type="text" name="SurveyQuestion_{$question.id}_Text" value="{$question.text|wash('xhtml')}" size="70" />
-<br />
+</p>
 
 <label>{"Receivers"|i18n('survey')}</label>
 <table border="0" cellspacing="0" cellpadding="2">

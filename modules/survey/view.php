@@ -49,39 +49,28 @@ $Module =& $Params['Module'];
 
 $surveyID =& $Params['SurveyID'];
 
-$survey =& eZSurvey::fetch( $surveyID );
+$survey = eZSurvey::fetch( $surveyID );
 
 $current_site_access = $GLOBALS['eZCurrentAccess'];
 
-$error = false;
 
-if($current_site_access['name']=='admin'){
 
-	$error = !$survey;
-
-}else{
-
-        $error = ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() );
-
-}
-
-if ( $error)
+if ( !$survey || !$survey->published() || !$survey->enabled() || !$survey->valid() )
+{
+    // survey not avialable do we need to display it for the backend?
     return $Module->handleError( EZ_ERROR_KERNEL_NOT_AVAILABLE, 'kernel' );
-
+}
 if ( $http->hasPostVariable( 'SurveyCancelButton' ) )
 {
 
-    if($current_site_access['name']!='admin'){
-
-       $Module->redirectTo( $survey->attribute( 'redirect_cancel' ) );
-
-    }else{
-
-       $Module->redirectTo('survey/list');
-
+    if( $survey->attribute( 'redirect_cancel' ) )
+    {
+       return $Module->redirectTo( $survey->attribute( 'redirect_cancel' ) );
     }
-
-    return;
+    else
+    {
+       return $Module->redirectTo('survey/list');
+    }
 }
 
 $validation = array();
@@ -128,18 +117,11 @@ if ( $http->hasPostVariable( 'SurveyStoreButton' ) && $validation['error'] == fa
         $mailResult = eZMailTransport::send( $mail );
     }
 
-    $current_site_access = $GLOBALS['eZCurrentAccess'];
-
-    if($current_site_access['name']!='admin'){
-
-       $Module->redirectTo( $survey->attribute( 'redirect_submit' ) );
-
+    if( $survey->attribute( 'redirect_submit' ) ){
+       return $Module->redirectTo( $survey->attribute( 'redirect_submit' ) );
     }else{
-
-       $Module->redirectTo('survey/result/'.$surveyID);
-
+       return $Module->redirectTo('survey/result/'.$surveyID);
     }
-
 }
 
 $res =& eZTemplateDesignResource::instance();

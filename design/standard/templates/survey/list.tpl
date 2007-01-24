@@ -54,8 +54,8 @@
 {/section}
 </table>
 
-<div class="buttonblock" style="margin-top:4px;">
-<input type="submit" class="button" name="SurveyNewSurveyButton" value="{'New Survey'|i18n( 'survey' )}" />
+<div class="buttonblock">
+<input class="button" type="submit" class="button" name="SurveyNewSurveyButton" value="{'New Survey'|i18n( 'survey' )}" />
 </div>
 
 </form>

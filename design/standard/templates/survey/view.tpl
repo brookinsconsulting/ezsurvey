@@ -14,10 +14,9 @@
 
   {section var=question loop=$survey.questions}
     {section show=$question.visible}
-      <div class="survey-block">
+      <div class="block">
       <input type="hidden" name="SurveyQuestionList[]" value="{$question.id}" />
       {survey_question_view_gui question=$question question_result=$question_results[$question.id]}
-      <br/>
       </div>
     {/section}
   {/section}
@@ -25,26 +24,25 @@
 
   {section var=question loop=$survey.questions}
     {section show=$question.visible}
-      <div class="survey-block">
+      <div class="block">
       <input type="hidden" name="SurveyQuestionList[]" value="{$question.id}" />
       {survey_question_view_gui question=$question question_result=0}
-      <br/>
       </div>
     {/section}
   {/section}
 
 {/section}
 {/let}
-<div class="block-end" ><img id="right" src={"end2.jpg"|ezimage} alt="" /></div>
-<div class="end-button">
-<br/>
+
+<div class="block">
+
 {section show=$preview}
 </form>
 <form enctype="multipart/form-data" method="post" action={concat("survey/edit/",$survey.id)|ezurl}>
-<input type="image" src={"cancel.gif"|ezimage} name="SurveyBackButton" value="{'Back'|i18n( 'survey' )}" alt="" onmouseover='javascript:this.src = {"cancel_ro.gif"|ezimage}' onmouseout='javascript:this.src = {"cancel.gif"|ezimage}' />
+<input class="button" type="submit" name="SurveyBackButton" value="{'Back'|i18n( 'survey' )}" alt="" />
 {section-else}
-	<input type="image" src={"send.gif"|ezimage} name="SurveyStoreButton" value="{'Submit'|i18n( 'survey' )}" alt="Send" onmouseover='javascript:this.src = {"send_ro.gif"|ezimage}' onmouseout='javascript:this.src = {"send.gif"|ezimage}' />
-	<input type="image" src={"cancel.gif"|ezimage} name="SurveyCancelButton" value="{'Cancel'|i18n( 'survey' )}" alt="Cancel" onmouseover='javascript:this.src = {"cancel_ro.gif"|ezimage}' onmouseout='javascript:this.src = {"cancel.gif"|ezimage}' />
+	<input class="button" type="submit" name="SurveyStoreButton" value="{'Submit'|i18n( 'survey' )}" alt="Send" />
+	<input class="button" type="submit" name="SurveyCancelButton" value="{'Cancel'|i18n( 'survey' )}" alt="Cancel" />
 {/section}
 </div>
 
