@@ -1,4 +1,4 @@
-<label class="intro">{$question.text|wash('xhtml')} {switch match=$question.num}{case match=1}*{/case}{case match=2}*{/case}{/switch}</label>
+<label class="intro">{$question.text|wash('xhtml')} {switch match=$question.num}{case match=1}<span class="required" >*</span>{/case}{case match=2}<span class="required" >*</span>{/case}{/switch}</label>
 <div class="block">
 {section show=$question_result}
 
@@ -50,7 +50,7 @@
 	{case match=1}
         <div class="element">
 	{section var=option loop=$question.options}
-        <input name="SurveyAnswer_{$question.id}" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="radio" value="{$option.value}" {section show=$option.toggled|eq(1)} checked{/section} style="float:left;margin-right:10px;"/>
+        <input name="SurveyAnswer_{$question.id}" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="radio" value="{$option.value}" {section show=$option.toggled|eq(1)} checked{/section} />
 	<label for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}">{$option.label}</label>
 	{/section}
         </div>
@@ -66,7 +66,7 @@
 	{case match=3}
 	<div class="element">
 	{section var=option loop=$question.options}
-	<input name="SurveyAnswer_{$question.id}[]" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="checkbox" value="{$option.value}"{section show=$option.toggled|eq(1)} checked{/section} style="float:left;margin-right:10px;" />
+	<input name="SurveyAnswer_{$question.id}[]" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="checkbox" value="{$option.value}"{section show=$option.toggled|eq(1)} checked{/section} />
 			<label for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}">{$option.label}</label>
 	{/section}
 	</div>

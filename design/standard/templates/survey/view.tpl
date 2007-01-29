@@ -2,8 +2,8 @@
 <div class="survey">
 <form enctype="multipart/form-data" method="post" action={concat("survey/view/",$survey.id)|ezurl}>
 <input type="hidden" name="SurveyID" value="{$survey.id}" />
-<h4>{$survey.title|wash}</h4>
-{"Questions marked with %mark% are required."|i18n('survey', '', hash( '%mark%', '<strong>*</strong>' ) )}
+<h1>{$survey.title|wash}</h1>
+<p>{"Questions marked with %mark% are required."|i18n('survey', '', hash( '%mark%', '<span class="required">*</span>' ) )}</p>
 
 {section show=$preview|not}
 	{include uri="design:survey/view_validation.tpl"}
