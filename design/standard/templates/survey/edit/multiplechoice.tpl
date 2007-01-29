@@ -3,7 +3,7 @@
 <div class="block">
 <label>{"Text of question"|i18n( 'survey' )}</label><div class="labelbreak"></div>
 <input type="text" name="SurveyQuestion_{$question.id}_Text" value="{$question.text|wash('xhtml')}" size="70"  />
-<br />
+
 
 <label>{"Rendering style"|i18n( 'survey' )}</label><div class="labelbreak"></div>
 <select name="SurveyQuestion_{$question.id}_Num" >

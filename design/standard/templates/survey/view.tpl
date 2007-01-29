@@ -1,4 +1,3 @@
-<div class="left-menu">&nbsp;</div>
 <div class="survey">
 <form enctype="multipart/form-data" method="post" action={concat("survey/view/",$survey.id)|ezurl}>
 <input type="hidden" name="SurveyID" value="{$survey.id}" />
@@ -14,37 +13,36 @@
 
   {section var=question loop=$survey.questions}
     {section show=$question.visible}
-      <div class="block">
       <input type="hidden" name="SurveyQuestionList[]" value="{$question.id}" />
       {survey_question_view_gui question=$question question_result=$question_results[$question.id]}
-      </div>
     {/section}
   {/section}
 {section-else}
 
   {section var=question loop=$survey.questions}
     {section show=$question.visible}
-      <div class="block">
       <input type="hidden" name="SurveyQuestionList[]" value="{$question.id}" />
       {survey_question_view_gui question=$question question_result=0}
-      </div>
     {/section}
   {/section}
 
 {/section}
 {/let}
 
-<div class="block">
+
 
 {section show=$preview}
 </form>
 <form enctype="multipart/form-data" method="post" action={concat("survey/edit/",$survey.id)|ezurl}>
+<div class="buttonblock">
 <input class="button" type="submit" name="SurveyBackButton" value="{'Back'|i18n( 'survey' )}" alt="" />
+</div>
 {section-else}
+<div class="buttonblock">
 	<input class="button" type="submit" name="SurveyStoreButton" value="{'Submit'|i18n( 'survey' )}" alt="Send" />
 	<input class="button" type="submit" name="SurveyCancelButton" value="{'Cancel'|i18n( 'survey' )}" alt="Cancel" />
-{/section}
 </div>
+	{/section}
 
 </form>
 </div>
