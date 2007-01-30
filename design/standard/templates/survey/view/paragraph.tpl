@@ -1,1 +1,1 @@
-<p>{$question.text|wash('xhtml')}</p>
+<p class="block">{$question.text|wash('xhtml')}</p>

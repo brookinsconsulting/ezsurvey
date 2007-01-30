@@ -1,5 +1,5 @@
+<div class="block">
 <label class="intro" for="SurveyAnswer_{$question.id}">{$question.text|wash('xhtml')} {section show=$question.mandatory}*{/section}&nbsp;</label>
-<div class="input">
 {switch match=$question.num2}
 {case match=1}
 {section show=$question_result}
