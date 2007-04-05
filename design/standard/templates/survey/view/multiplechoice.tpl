@@ -22,17 +22,17 @@
 	{/case}
 	{case match=3}
 		{section var=option loop=$question.options}
-			<div class="element">
+			<div class="element vertical">
 				<input id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="checkbox" name="SurveyAnswer_{$question.id}[]" type="checkbox" value="{$option.value}"{section show=is_set( $question_result[$option.value] )} checked="checked"{/section} />
-				<label for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="txt">{$option.label}</label>
+				<label class="txt" for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="txt">{$option.label}</label>
 			</div>
 		{/section}
 	{/case}
 	{case match=4}
 	{section var=option loop=$question.options}
-		<div class="element">
+		<div class="element vertical">
 			<input id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="checkbox" name="SurveyAnswer_{$question.id}[]" type="checkbox" value="{$option.value}"{section show=is_set( $question_result[$option.value] )} checked="checked"{/section} />
-			<label for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="txt">{$option.label}</label>
+			<label class="txt" for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" class="txt">{$option.label}</label>
 		</div>
 	{/section}
 	{/case}
@@ -65,16 +65,16 @@
 	{/section}
 	{/case}
 	{case match=3}
-	<div class="element">
 	{section var=option loop=$question.options}
-	<input name="SurveyAnswer_{$question.id}[]" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="checkbox" value="{$option.value}"{section show=$option.toggled|eq(1)} checked{/section} />
-			<label for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}">{$option.label}</label>
-	{/section}
-	</div>
+	   <div class="element vertical">
+	        <input name="SurveyAnswer_{$question.id}[]" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="checkbox" value="{$option.value}"{section show=$option.toggled|eq(1)} checked{/section} />
+			<label class="txt" for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}">{$option.label}</label>
+	   </div>
+    {/section}
 	{/case}
 	{case match=4}
 	{section var=option loop=$question.options}
-		<div class="element">
+		<div class="element vertical">
 			<input name="SurveyAnswer_{$question.id}[]" id="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" type="checkbox" value="{$option.value}"{section show=$option.toggled|eq(1)} checked{/section} />
 			<label class="txt" for="SurveyAnswer_{$question.id}_{$option.id}_{$option.value}" >{$option.label}</label>
 		</div>
